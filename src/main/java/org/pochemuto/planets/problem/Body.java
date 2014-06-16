@@ -74,4 +74,15 @@ public class Body {
     public void setVy(double vy) {
         this.vy.set(vy);
     }
+
+    @Override
+    public String toString() {
+        return "Body{" +
+                "mass=" + mass +
+                ", x=" + x +
+                ", y=" + y +
+                ", vx=" + vx +
+                ", vy=" + vy +
+                '}';
+    }
 }

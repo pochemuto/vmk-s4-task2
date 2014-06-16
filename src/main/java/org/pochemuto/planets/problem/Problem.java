@@ -1,5 +1,8 @@
 package org.pochemuto.planets.problem;
 
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +15,6 @@ import org.pochemuto.planets.core.F;
  */
 public class Problem {
     public static final double G = 6.67384e-11;
-    private static final double STEP = 0.1;
 
     private final List<Body> bodies = new ArrayList<>();
 
@@ -24,9 +26,9 @@ public class Problem {
         time = 0;
     }
 
-    public void next() {
+    public void next(double step) {
         final double t1 = time;
-        time += STEP;
+        time += step;
         final double t2 = time;
         int count = bodies.size(), i;
 
@@ -49,15 +51,17 @@ public class Problem {
                 double m2 = b2.getMass();
                 double x1 = b1.getX(), y1 = b1.getY(), x2 = b2.getX(), y2 = b2.getY(), vx1 = b1.getVx(), vy1 = b1.getVy();
 
-                F gx = (t, f) -> -G * m2 * (x1 - x2);
-                F gy = (t, f) -> -G * m2 * (y1 - y2);
+                double r = sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
+                F gx = (t, f) -> G * m2 * (x2 - x1) / pow(r, 3);
+                F gy = (t, f) -> G * m2 * (y2 - y1) / pow(r, 3);
                 Fnum fx = new Fnum(scheme, gx, t1, vx1);
                 Fnum fy = new Fnum(scheme, gy, t1, vy1);
 
+//                System.out.println("r = " + r);
                 vx[i] += scheme.y2(gx, t1, vx1, t2) - b1.getVx();
                 vy[i] += scheme.y2(gy, t1, vy1, t2) - b1.getVy();
-                x[i]  += scheme.y2(fx, t1, x1,  t2) - b1.getX();
-                y[i]  += scheme.y2(fy, t1, y1,  t2) - b1.getY();
+                x[i] += scheme.y2(fx, t1, x1, t2) - b1.getX();
+                y[i] += scheme.y2(fy, t1, y1, t2) - b1.getY();
 
             }
             i++;
@@ -69,6 +73,7 @@ public class Problem {
             body.setY(y[i]);
             body.setVx(vx[i]);
             body.setVy(vy[i]);
+//            System.out.println(body);
             i++;
         }
 
