@@ -10,7 +10,7 @@
 
 <GridPane prefHeight="500.0" prefWidth="800.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="org.pochemuto.planets.view.Controller">
   <children>
-    <Pane fx:id="pane" onMouseDragged="#paneDrag" onMousePressed="#panePress" GridPane.columnIndex="0" GridPane.rowIndex="0">
+    <Pane fx:id="pane" onMouseClicked="#paneClick" onMouseDragged="#paneDrag" onMousePressed="#panePress" GridPane.columnIndex="0" GridPane.rowIndex="0">
       <children>
         <Path fx:id="path" />
       </children>
